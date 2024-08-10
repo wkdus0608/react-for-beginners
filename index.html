@@ -9,55 +9,34 @@
 
 <body>
     <div id="root"></div>
-</body>
 
 <script src="https://unpkg.com/react@17.0.2/umd/react.development.js"></script>
 <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
 <script type="text/babel">
-    const root = document.getElementById("root");
-    const Title = () => <h3 id="title" onMouseEnter={() => console.log("mouse enter")}>i am h3</h3>
-    const Button = () => <button id="btn" onClick={() => console.log("i am clicked")}>Click me</button>
-    // const h3 = React.createElement("h3", {
-    //     onMouseEnter: () => console.log("mouse enter!"),
-    // }, "Hello");
-    // const btn = React.createElement("button", {
-    //     onClick: () => console.log("i am clicked"),
-    // }, "Click me");
 
-
-    let counter = 0;
-    function countUp() {
-        counter = counter + 1;
-        render();
-    }
-    function render() {
-        ReactDOM.render(<App />, root);
-    }
-
-    function App() {
-        const [amount, setAmount] = React.useState();
+    function MinutesToHours() {
+        const [amount, setAmount] = React.useState(0);
         const [flipped, setFlipped] = React.useState(false);
-        const onChange = (event) => {setAmount(event.target.value);}
+        const onChange = (event) => { setAmount(event.target.value); };
         const onReset = () => {
             setAmount(0);
-        }
+        };
         const onFlip = () => {
             onReset();
             setFlipped((current) => !current);
-        }
+        };
         return (
             <div>
-                <h1>SuperConverter</h1>
                 <h2>Input : {setAmount}</h2>
                 <div>
                     <label htmlFor="minute">Minutes</label>
-                    <input id="minute" placeholder="Minutes" type="number" value={flipped ? amount*60  : amount} onChange={onChange} disabled={flipped} />
+                    <input id="minute" placeholder="Minutes" type="number" value={flipped ? amount * 60 : amount} onChange={onChange} disabled={flipped} />
                 </div>
                 <div>
                     <label htmlFor="hour">Hours</label>
-                    <input id="hour" placeholder="Hours" type="number" value={flipped ? amount : Math.round(amount /60)} onChange={onChange} disabled={! flipped} />
+                    <input id="hour" placeholder="Hours" type="number" value={flipped ? amount : Math.round(amount / 60)} onChange={onChange} disabled={flipped === false} />
                 </div>
 
                 <button onClick={onReset}>Reset</button>
@@ -65,11 +44,64 @@
             </div>
         );
     }
-    // const container = React.createElement("div", null, [Title, Button]);
+    function CmToinch() {
+        const [amount, setAmount] = React.useState(0);
+        const [flipped, setFlipped] = React.useState(false);
+        const onChange = (event) => { setAmount(event.target.value); };
+        const onReset = () => {
+            setAmount(0);
+        };
+        const onFlip = () => {
+            onReset();
+            setFlipped((current) => !current);
+        };
+        return (
+            <div>
+                <h2>Input : {setAmount}</h2>
+                <div>
+                    <label htmlFor="cm">CM</label>
+                    <input id="cm" placeholder="cm" type="number" value={flipped ? amount * 2.54 : amount} onChange={onChange} disabled={flipped} />
+                </div>
+                <div>
+                    <label htmlFor="inch">Inch</label>
+                    <input id="inch" placeholder="Inch" type="number" value={flipped ? amount : amount / 2.54} onChange={onChange} disabled={flipped === false} />
+                </div>
 
-    // root 안에 container
-    render();
+                <button onClick={onReset}>Reset</button>
+                <button onClick={onFlip}>Flip</button>
+            </div>
+        );
+    }
+
+    function App() {
+        const [index, setIndex] = React.useState("xx");
+        const onSelect = (event) => {
+            setIndex(event.target.value);
+        }
+        return ( 
+            <div>
+                <h1>Super Converter</h1>
+                <select onChange={onSelect} value={index}>
+                    <option value="xx">---- Select your Units  ----</option>
+                    <option value="0">Minutes & Hours Converter</option>
+                    <option value="1">Cm  & Inch Converter</option>
+                </select>
+                <hr />
+
+                {index === "0" ? <MinutesToHours /> : null}
+                {index === "1" ? <CmToinch /> :  null}
+            </div>
+        );
+    }
+
+    const root = document.getElementById("root");
+    ReactDOM.render(<App />, root);
+
 
 </script>
+<link rel="stylesheet" href="style.css"> <!-- CSS 파일 링크 -->
+
+</body>
+
 
 </html>
