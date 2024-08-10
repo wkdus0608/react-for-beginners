@@ -11,12 +11,65 @@
     <div id="root"></div>
 </body>
 
-<script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
-<script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
-<script>
+<script src="https://unpkg.com/react@17.0.2/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<script type="text/babel">
     const root = document.getElementById("root");
-    const span = React.createElement("span", {id: "sexy-span"}, "Hello");
-    ReactDOM.render(span, root);
+    const Title = () => <h3 id="title" onMouseEnter={() => console.log("mouse enter")}>i am h3</h3>
+    const Button = () => <button id="btn" onClick={() => console.log("i am clicked")}>Click me</button>
+    // const h3 = React.createElement("h3", {
+    //     onMouseEnter: () => console.log("mouse enter!"),
+    // }, "Hello");
+    // const btn = React.createElement("button", {
+    //     onClick: () => console.log("i am clicked"),
+    // }, "Click me");
+
+
+    let counter = 0;
+    function countUp() {
+        counter = counter + 1;
+        render();
+    }
+    function render() {
+        ReactDOM.render(<App />, root);
+    }
+
+    function App() {
+        const [amount, setAmount] = React.useState();
+        const [flipped, setFlipped] = React.useState(false);
+        const onChange = (event) => {setAmount(event.target.value);}
+        const onReset = () => {
+            setAmount(0);
+        }
+        const onFlip = () => {
+            onReset();
+            setFlipped((current) => !current);
+        }
+        return (
+            <div>
+                <h1>SuperConverter</h1>
+                <h2>Input : {setAmount}</h2>
+                <div>
+                    <label htmlFor="minute">Minutes</label>
+                    <input id="minute" placeholder="Minutes" type="number" value={flipped ? amount*60  : amount} onChange={onChange} disabled={flipped} />
+                </div>
+                <div>
+                    <label htmlFor="hour">Hours</label>
+                    <input id="hour" placeholder="Hours" type="number" value={flipped ? amount : Math.round(amount /60)} onChange={onChange} disabled={! flipped} />
+                </div>
+
+                <button onClick={onReset}>Reset</button>
+                <button onClick={onFlip}>Flip</button>
+            </div>
+        );
+    }
+    // const container = React.createElement("div", null, [Title, Button]);
+
+    // root 안에 container
+    render();
+
 </script>
 
 </html>
