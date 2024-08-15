@@ -14,6 +14,7 @@ function App() {
   };
   console.log(toDos);
   console.log(toDo);
+  console.log(toDos)
 
   return (
     <div>
