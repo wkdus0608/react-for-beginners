@@ -1,35 +1,50 @@
-import { useState } from "react";
+const { useState, useEffect } = require("react");
 
 function App() {
-  const [toDo, setToDo] = useState("");
-  const [toDos, setToDos] = useState([]);
-  const onChange = (event) => setToDo(event.target.value);
-  const onSubmit = (event) => {
+  const [loading, setLoading] = useState(true);
+  const [coins, setCoins] = useState([]);
+  const [amount, setAmount] = useState("");
+
+
+  useEffect(() => {
+    fetch("https://api.coinpaprika.com/v1/tickers")
+      .then((response) => response.json())
+      .then((json) => {
+        setCoins(json);
+        setLoading(false);
+      });
+  }, []);
+
+  const onChange = (event) => {
+    setAmount(event.target.value);
+  }
+  const handleSubmit = (event) => {
     event.preventDefault();
-    if (toDo === "") {
-      return;
-    }
-    setToDos((currentArray) => [toDo, ...currentArray]);
-    setToDo("");
-  };
-  console.log(toDos);
-  console.log(toDo);
-  console.log(toDos)
+    console.log(amount);
+  }
 
   return (
     <div>
-      <form onSubmit={onSubmit}>
-        <input onChange={onChange} value={toDo} type="text" placeholder="Please write TODO">
-        </input>
+      <h1>Use Coin API</h1>
+      <p style={{ fontWeight: "bold" }}>You can see {coins.length} coin list </p>
+      {loading ? <strong>Loading...</strong> : null}
+      <h2 style={{ fontSize: "15px" }}>Write dollar you want to invest</h2>
 
-        <button>Add to do</button>
+      <form onSubmit={handleSubmit}>
+      <input type="number" onChange={onChange} placeholder="$"></input>
       </form>
-      <hr />
+
       <ul>
-        {toDos.map((item, index) => (
-          <li key={index}>{item}</li>
-        ))}
+        {coins.map((coin) => (
+          <li> {coin.name}({coin.symbol})
+            <ul>
+              <li>Amount you can buy : {(amount)/(coin.quotes.USD.price)}</li>
+            </ul>
+          </li>
+        ))
+        }
       </ul>
+
     </div>
   );
 }
