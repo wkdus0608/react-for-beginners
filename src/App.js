@@ -13,6 +13,7 @@ function App() {
     setToDo("");
   };
   console.log(toDos);
+  console.log(toDo);
 
   return (
     <div>
