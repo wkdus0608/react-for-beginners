@@ -1,51 +1,32 @@
-const { useState, useEffect } = require("react");
+import { useEffect, useState } from "react";
 
 function App() {
   const [loading, setLoading] = useState(true);
-  const [coins, setCoins] = useState([]);
-  const [amount, setAmount] = useState("");
-
-
+  const [movies, setMovies] = useState([]);
   useEffect(() => {
-    fetch("https://api.coinpaprika.com/v1/tickers")
-      .then((response) => response.json())
-      .then((json) => {
-        setCoins(json);
-        setLoading(false);
-      });
+    fetch(`https://yts.mx/api/v2/list_movies.json?minimum_rating=9&sort_by=year`
+    )
+    .then(responce => responce.json())
+    .then(json => setMovies(json.data.movies));
+    setLoading(false);
   }, []);
-
-  const onChange = (event) => {
-    setAmount(event.target.value);
-  }
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log(amount);
-  }
-
+  console.log(movies); 
   return (
-    <div>
-      <h1>Use Coin API</h1>
-      <p style={{ fontWeight: "bold" }}>You can see {coins.length} coin list </p>
-      {loading ? <strong>Loading...</strong> : null}
-      <h2 style={{ fontSize: "15px" }}>Write dollar you want to invest</h2>
-
-      <form onSubmit={handleSubmit}>
-      <input type="number" onChange={onChange} placeholder="$"></input>
-      </form>
-
+  <div>
+    {loading ? <h1>Loading...</h1> : (<div>{movies.map(movie =>
+    <div key={movie.id}>
+      <h2>{movie.title}</h2>
+      <img src={movie.medium_cover_image} />
+      <p>{movie.summary}</p>
       <ul>
-        {coins.map((coin) => (
-          <li> {coin.name}({coin.symbol})
-            <ul>
-              <li>Amount you can buy : {(amount)/(coin.quotes.USD.price)}</li>
-            </ul>
-          </li>
-        ))
-        }
+        {movie.genres.map((g) => (
+          <li key={g}>{g}</li>
+        ))}
       </ul>
-
+      <hr />
     </div>
+      )}</div>)}
+  </div>
   );
 }
 
