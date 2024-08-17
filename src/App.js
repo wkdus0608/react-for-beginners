@@ -5,7 +5,8 @@ import Detail from "./routes/Detail";
 function App() {
   return <Router>
     <Switch>
-      <Route path="/movie"><Detail /></Route>
+      <Route path="/hello"><h1>hello</h1></Route>
+      <Route path="/movie/:id"><Detail /></Route>
       <Route path="/"><Home /></Route>
     </Switch>
   </Router>;
